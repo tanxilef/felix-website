@@ -34,7 +34,7 @@
 
   a { color: inherit; }
 
-  /* ── NAV ── */
+  /* NAV */
   nav {
     position: fixed;
     top: 0; left: 0; right: 0;
@@ -110,18 +110,13 @@
   }
   .nav-drawer a:hover { color: var(--accent); }
 
-  /* ── HERO ── */
+  /* HERO */
   #home {
     min-height: 100vh;
     display: grid;
-    /*
-      Right column: portrait width. min() ensures it never exceeds
-      the exact 9:16 portrait width at current viewport height,
-      so the embed fills edge-to-edge with no white bars.
-      #home has NO padding — padding lives in hero-left only.
-    */
     grid-template-columns: 1fr min(46vw, calc(100vh * 9 / 16));
     overflow: hidden;
+    /* no padding here — padding lives inside hero-left only */
   }
 
   .hero-left {
@@ -149,10 +144,7 @@
     margin-bottom: 1.5rem;
   }
 
-  .hero-title em {
-    font-style: italic;
-    color: var(--accent);
-  }
+  .hero-title em { font-style: italic; color: var(--accent); }
 
   .hero-sub {
     font-size: 1rem;
@@ -162,12 +154,7 @@
     margin-bottom: 2.5rem;
   }
 
-  .hero-cta {
-    display: flex;
-    gap: 1rem;
-    flex-wrap: wrap;
-    margin-bottom: 2.5rem;
-  }
+  .hero-cta { display: flex; gap: 1rem; flex-wrap: wrap; margin-bottom: 2.5rem; }
 
   .btn {
     display: inline-flex;
@@ -260,7 +247,7 @@
   }
   .hero-reel-fallback a:hover { border-color: var(--accent); color: var(--accent); }
 
-  /* ── SECTION BASE ── */
+  /* SECTION BASE */
   section { padding: 6rem 3rem; }
   .section-label { margin-bottom: 1rem; }
 
@@ -271,12 +258,8 @@
     margin-bottom: 2rem;
   }
 
-  /* ── STORIES ── */
-  #stories {
-    background: var(--ink);
-    color: var(--cream);
-  }
-
+  /* STORIES */
+  #stories { background: var(--ink); color: var(--cream); }
   #stories .section-title { color: var(--cream); }
 
   .stories-header {
@@ -302,9 +285,12 @@
 
   .video-card {
     position: relative;
-    aspect-ratio: 9 / 16;
+    /* 9/14 is less extreme than 9/16 — keeps the section from being too tall */
+    aspect-ratio: 9 / 14;
     overflow: hidden;
     background: var(--ink);
+    /* isolation ensures the mask div stacks correctly above the iframe */
+    isolation: isolate;
   }
 
   .video-card iframe {
@@ -313,21 +299,20 @@
     width: 100%;
     height: 100%;
     border: none;
+    z-index: 0;
   }
 
   /*
-    Dark mask over the bottom of each card.
-    TikTok’s embed chrome (Watch Now bar, caption, description) is a
-    fixed ~180px UI block at the bottom of the iframe. Covering it with
-    a same-colour rectangle hides it cleanly without needing JS.
+    Real div (not ::after) used here because pseudo-elements don’t reliably
+    stack above iframes in all browsers. This div covers TikTok’s bottom
+    chrome (Watch Now bar + caption — roughly 160px at typical card sizes).
   */
-  .video-card::after {
-    content: '';
+  .video-chrome-mask {
     position: absolute;
     bottom: 0;
     left: 0;
     right: 0;
-    height: 185px;
+    height: 170px;
     background: var(--ink);
     z-index: 1;
     pointer-events: none;
@@ -336,7 +321,7 @@
   .video-card-overlay {
     position: absolute;
     inset: 0;
-    background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, transparent 35%);
+    background: linear-gradient(to top, rgba(0,0,0,0.85) 0%, transparent 38%);
     display: flex;
     flex-direction: column;
     justify-content: flex-end;
@@ -361,7 +346,7 @@
     line-height: 1.3;
   }
 
-  /* ── ABOUT ── */
+  /* ABOUT */
   #about {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -428,7 +413,7 @@
     font-size: 0.95rem;
   }
 
-  /* ── CONTACT ── */
+  /* CONTACT */
   #contact { background: var(--warm); }
 
   .contact-layout {
@@ -454,17 +439,9 @@
   }
   .contact-intro a:hover { text-decoration-color: var(--accent); }
 
-  .contact-form {
-    display: flex;
-    flex-direction: column;
-    gap: 1.25rem;
-  }
+  .contact-form { display: flex; flex-direction: column; gap: 1.25rem; }
 
-  .form-group {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-  }
+  .form-group { display: flex; flex-direction: column; gap: 0.5rem; }
 
   .form-group label {
     font-size: 0.72rem;
@@ -487,18 +464,11 @@
   .form-group input:focus,
   .form-group textarea:focus { border-color: var(--accent); }
 
-  .form-group textarea {
-    resize: vertical;
-    min-height: 130px;
-  }
+  .form-group textarea { resize: vertical; min-height: 130px; }
 
-  .form-note {
-    font-size: 0.78rem;
-    color: var(--muted);
-    margin-top: 0.25rem;
-  }
+  .form-note { font-size: 0.78rem; color: var(--muted); margin-top: 0.25rem; }
 
-  /* ── FOOTER ── */
+  /* FOOTER */
   footer {
     background: var(--ink);
     color: rgba(245,240,232,0.4);
@@ -518,12 +488,7 @@
     text-decoration: none;
   }
 
-  .footer-socials {
-    display: flex;
-    gap: 2rem;
-    flex-wrap: wrap;
-    justify-content: center;
-  }
+  .footer-socials { display: flex; gap: 2rem; flex-wrap: wrap; justify-content: center; }
 
   .footer-socials a {
     font-size: 0.78rem;
@@ -535,16 +500,12 @@
   }
   .footer-socials a:hover { color: var(--accent); }
 
-  .footer-bottom {
-    font-size: 0.7rem;
-    letter-spacing: 0.08em;
-    color: rgba(245,240,232,0.3);
-  }
+  .footer-bottom { font-size: 0.7rem; letter-spacing: 0.08em; color: rgba(245,240,232,0.3); }
 
-  /* ── ANIMATIONS ── */
+  /* ANIMATIONS */
   @keyframes fadeUp {
     from { opacity: 0; transform: translateY(30px); }
-    to { opacity: 1; transform: translateY(0); }
+    to   { opacity: 1; transform: translateY(0); }
   }
 
   .hero-eyebrow { animation: fadeUp 0.6s ease 0.1s both; }
@@ -553,7 +514,7 @@
   .hero-cta     { animation: fadeUp 0.6s ease 0.5s both; }
   .hero-stats   { animation: fadeUp 0.6s ease 0.6s both; }
 
-  /* ── RESPONSIVE ── */
+  /* RESPONSIVE */
   @media (max-width: 900px) {
     nav { padding: 1rem 1.5rem; }
     .nav-links { gap: 1.5rem; }
@@ -565,11 +526,9 @@
     section { padding: 4rem 1.5rem; }
 
     .stories-header { flex-direction: column; align-items: flex-start; gap: 1rem; }
-
     .video-grid { grid-template-columns: repeat(2, 1fr); }
 
     #about { grid-template-columns: 1fr; gap: 3rem; }
-
     .contact-layout { grid-template-columns: 1fr; gap: 3rem; }
   }
 
@@ -581,8 +540,7 @@
     .hero-stats { gap: 1.25rem; flex-wrap: wrap; }
 
     .video-grid { grid-template-columns: repeat(2, 1fr); }
-    .video-card { aspect-ratio: 9 / 14; }
-    .video-card::after { height: 140px; }
+    .video-chrome-mask { height: 130px; }
 
     .section-title { margin-bottom: 1.5rem; }
     .footer-socials { gap: 1.25rem 1.5rem; }
@@ -646,7 +604,6 @@
     </div>
   </div>
 
-  <!-- Instagram reel: no autoplay by design, no music licensing blocks -->
   <div class="hero-right" id="heroRight">
     <iframe
       id="heroIframe"
@@ -680,6 +637,7 @@
 
     <div class="video-card">
       <iframe src="https://www.tiktok.com/embed/v2/7509450755686845704?autoplay=0&music=0" frameborder="0" allow="clipboard-write; encrypted-media; picture-in-picture" allowfullscreen></iframe>
+      <div class="video-chrome-mask"></div>
       <div class="video-card-overlay">
         <p class="video-tag">Culture</p>
         <p class="video-title">Walking the largest mall in the world — Iran</p>
@@ -688,6 +646,7 @@
 
     <div class="video-card">
       <iframe src="https://www.tiktok.com/embed/v2/7605256125923036437?autoplay=0&music=0" frameborder="0" allow="clipboard-write; encrypted-media; picture-in-picture" allowfullscreen></iframe>
+      <div class="video-chrome-mask"></div>
       <div class="video-card-overlay">
         <p class="video-tag">Travel</p>
         <p class="video-title">Hotel room tour in Munnar</p>
@@ -696,6 +655,7 @@
 
     <div class="video-card">
       <iframe src="https://www.tiktok.com/embed/v2/7438803106135149831?autoplay=0&music=0" frameborder="0" allow="clipboard-write; encrypted-media; picture-in-picture" allowfullscreen></iframe>
+      <div class="video-chrome-mask"></div>
       <div class="video-card-overlay">
         <p class="video-tag">Overland</p>
         <p class="video-title">Singapore to Bangkok without flying</p>
@@ -704,6 +664,7 @@
 
     <div class="video-card">
       <iframe src="https://www.tiktok.com/embed/v2/7547363535349746952?autoplay=0&music=0" frameborder="0" allow="clipboard-write; encrypted-media; picture-in-picture" allowfullscreen></iframe>
+      <div class="video-chrome-mask"></div>
       <div class="video-card-overlay">
         <p class="video-tag">Tips</p>
         <p class="video-title">One day in Yangmingshan — easy itinerary</p>
@@ -749,10 +710,10 @@
   <div class="contact-layout">
     <div class="contact-intro">
       <p>
-        I love hearing from people — about a destination, a story that resonated, or just to say hi. No agenda needed.
+        Whether it's about a place I covered, a story that stuck with you, or just something on your mind — I'm always happy to hear from people.
       </p>
       <p>
-        If you're here with something more in mind — a project around travel, culture, language, or an everyday product — even better. Tell me what you're thinking, and we can figure out if it's a fit.
+        If you've got a project in mind around travel, culture, language, or an everyday product, tell me what you're thinking. Even a rough idea is a good start.
       </p>
       <p>
         For a fuller look at past work and case studies, <a href="CANVA_LINK_HERE" target="_blank" rel="noopener">here's my portfolio</a>.
@@ -795,11 +756,11 @@
 <script>
   document.getElementById('contactForm').addEventListener('submit', function(e) {
     e.preventDefault();
-    const name = document.getElementById('name').value;
-    const email = document.getElementById('email').value;
+    const name    = document.getElementById('name').value;
+    const email   = document.getElementById('email').value;
     const message = document.getElementById('message').value;
     const subject = encodeURIComponent('Message from ' + name);
-    const body = encodeURIComponent(message + '\n\n— ' + name + ' (' + email + ')');
+    const body    = encodeURIComponent(message + '\n\n— ' + name + ' (' + email + ')');
     window.location.href = 'mailto:fgtandadjaja@gmail.com?subject=' + subject + '&body=' + body;
   });
 
@@ -822,11 +783,11 @@
     });
   });
 
-  const heroIframe = document.getElementById('heroIframe');
+  const heroIframe   = document.getElementById('heroIframe');
   const heroFallback = document.getElementById('heroFallback');
-  let fallbackTimer = setTimeout(() => {
+  const fallbackTimer = setTimeout(() => {
     heroFallback.style.display = 'flex';
-    heroIframe.style.display = 'none';
+    heroIframe.style.display   = 'none';
   }, 8000);
   heroIframe.addEventListener('load', () => clearTimeout(fallbackTimer));
 </script>
