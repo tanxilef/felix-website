@@ -115,10 +115,12 @@
     min-height: 100vh;
     display: grid;
     /*
-      Right column: narrowest of 40vw or exactly 9:16 portrait width.
-      This ensures TikTok embed fills the panel without white side-bars.
+      Right column: portrait width. min() ensures it never exceeds
+      the exact 9:16 portrait width at current viewport height,
+      so the embed fills edge-to-edge with no white bars.
+      #home has NO padding — padding lives in hero-left only.
     */
-    grid-template-columns: 1fr min(40vw, calc(100vh * 9 / 16));
+    grid-template-columns: 1fr min(46vw, calc(100vh * 9 / 16));
     overflow: hidden;
   }
 
@@ -126,8 +128,7 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
-    /* top padding accounts for the fixed nav */
-    padding: 7rem 3rem 5rem;
+    padding: 8rem 3rem 5rem;
   }
 
   .hero-eyebrow,
@@ -210,7 +211,6 @@
     margin-top: 0.2rem;
   }
 
-  /* hero right: exact portrait container, iframe fills + clips TikTok chrome */
   .hero-right {
     position: relative;
     background: var(--ink);
@@ -219,12 +219,9 @@
 
   .hero-right iframe {
     position: absolute;
-    top: 0;
-    left: 0;
+    inset: 0;
     width: 100%;
-    /* 140% height pushes TikTok’s bottom chrome (Watch Now bar, caption)
-       below the visible area, which is clipped by overflow:hidden */
-    height: 140%;
+    height: 100%;
     border: none;
   }
 
@@ -297,7 +294,6 @@
     line-height: 1.7;
   }
 
-  /* single row of 4 portrait cards */
   .video-grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
@@ -313,24 +309,40 @@
 
   .video-card iframe {
     position: absolute;
-    top: 0;
-    left: 0;
+    inset: 0;
     width: 100%;
-    /* same technique as hero: push chrome below the card boundary */
-    height: 140%;
+    height: 100%;
     border: none;
+  }
+
+  /*
+    Dark mask over the bottom of each card.
+    TikTok’s embed chrome (Watch Now bar, caption, description) is a
+    fixed ~180px UI block at the bottom of the iframe. Covering it with
+    a same-colour rectangle hides it cleanly without needing JS.
+  */
+  .video-card::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 185px;
+    background: var(--ink);
+    z-index: 1;
+    pointer-events: none;
   }
 
   .video-card-overlay {
     position: absolute;
     inset: 0;
-    background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, transparent 40%);
+    background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, transparent 35%);
     display: flex;
     flex-direction: column;
     justify-content: flex-end;
     padding: 1.25rem;
     pointer-events: none;
-    z-index: 1;
+    z-index: 2;
   }
 
   .video-tag {
@@ -552,11 +564,7 @@
 
     section { padding: 4rem 1.5rem; }
 
-    .stories-header {
-      flex-direction: column;
-      align-items: flex-start;
-      gap: 1rem;
-    }
+    .stories-header { flex-direction: column; align-items: flex-start; gap: 1rem; }
 
     .video-grid { grid-template-columns: repeat(2, 1fr); }
 
@@ -570,14 +578,13 @@
     .nav-toggle { display: flex; }
 
     .hero-title { font-size: clamp(2.7rem, 14vw, 4rem); }
-
     .hero-stats { gap: 1.25rem; flex-wrap: wrap; }
 
     .video-grid { grid-template-columns: repeat(2, 1fr); }
     .video-card { aspect-ratio: 9 / 14; }
+    .video-card::after { height: 140px; }
 
     .section-title { margin-bottom: 1.5rem; }
-
     .footer-socials { gap: 1.25rem 1.5rem; }
   }
 </style>
@@ -639,17 +646,20 @@
     </div>
   </div>
 
+  <!-- Instagram reel: no autoplay by design, no music licensing blocks -->
   <div class="hero-right" id="heroRight">
     <iframe
       id="heroIframe"
-      src="https://www.tiktok.com/embed/v2/7571825080297098504"
+      src="https://www.instagram.com/reel/DQ9SOsujy_W/embed/"
       frameborder="0"
-      allow="clipboard-write; encrypted-media; picture-in-picture"
+      scrolling="no"
+      allowtransparency="true"
+      allow="clipboard-write; encrypted-media; picture-in-picture; web-share"
       allowfullscreen
     ></iframe>
     <div class="hero-reel-fallback" id="heroFallback">
       <p>Explaining my Chinese ancestry in Iran, in broken Farsi.</p>
-      <a href="https://www.tiktok.com/@flexi.travels/video/7571825080297098504" target="_blank" rel="noopener">Watch on TikTok</a>
+      <a href="https://www.instagram.com/reel/DQ9SOsujy_W/" target="_blank" rel="noopener">Watch on Instagram</a>
     </div>
   </div>
 </section>
@@ -669,7 +679,7 @@
   <div class="video-grid">
 
     <div class="video-card">
-      <iframe src="https://www.tiktok.com/embed/v2/7509450755686845704" frameborder="0" allow="clipboard-write; encrypted-media; picture-in-picture" allowfullscreen></iframe>
+      <iframe src="https://www.tiktok.com/embed/v2/7509450755686845704?autoplay=0&music=0" frameborder="0" allow="clipboard-write; encrypted-media; picture-in-picture" allowfullscreen></iframe>
       <div class="video-card-overlay">
         <p class="video-tag">Culture</p>
         <p class="video-title">Walking the largest mall in the world — Iran</p>
@@ -677,7 +687,7 @@
     </div>
 
     <div class="video-card">
-      <iframe src="https://www.tiktok.com/embed/v2/7605256125923036437" frameborder="0" allow="clipboard-write; encrypted-media; picture-in-picture" allowfullscreen></iframe>
+      <iframe src="https://www.tiktok.com/embed/v2/7605256125923036437?autoplay=0&music=0" frameborder="0" allow="clipboard-write; encrypted-media; picture-in-picture" allowfullscreen></iframe>
       <div class="video-card-overlay">
         <p class="video-tag">Travel</p>
         <p class="video-title">Hotel room tour in Munnar</p>
@@ -685,7 +695,7 @@
     </div>
 
     <div class="video-card">
-      <iframe src="https://www.tiktok.com/embed/v2/7438803106135149831" frameborder="0" allow="clipboard-write; encrypted-media; picture-in-picture" allowfullscreen></iframe>
+      <iframe src="https://www.tiktok.com/embed/v2/7438803106135149831?autoplay=0&music=0" frameborder="0" allow="clipboard-write; encrypted-media; picture-in-picture" allowfullscreen></iframe>
       <div class="video-card-overlay">
         <p class="video-tag">Overland</p>
         <p class="video-title">Singapore to Bangkok without flying</p>
@@ -693,7 +703,7 @@
     </div>
 
     <div class="video-card">
-      <iframe src="https://www.tiktok.com/embed/v2/7547363535349746952" frameborder="0" allow="clipboard-write; encrypted-media; picture-in-picture" allowfullscreen></iframe>
+      <iframe src="https://www.tiktok.com/embed/v2/7547363535349746952?autoplay=0&music=0" frameborder="0" allow="clipboard-write; encrypted-media; picture-in-picture" allowfullscreen></iframe>
       <div class="video-card-overlay">
         <p class="video-tag">Tips</p>
         <p class="video-title">One day in Yangmingshan — easy itinerary</p>
