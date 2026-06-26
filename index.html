@@ -114,8 +114,11 @@
   #home {
     min-height: 100vh;
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    padding-top: 5rem;
+    /*
+      Right column: narrowest of 40vw or exactly 9:16 portrait width.
+      This ensures TikTok embed fills the panel without white side-bars.
+    */
+    grid-template-columns: 1fr min(40vw, calc(100vh * 9 / 16));
     overflow: hidden;
   }
 
@@ -123,7 +126,8 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
-    padding: 5rem 3rem;
+    /* top padding accounts for the fixed nav */
+    padding: 7rem 3rem 5rem;
   }
 
   .hero-eyebrow,
@@ -206,26 +210,22 @@
     margin-top: 0.2rem;
   }
 
-  /* hero right: dark panel, iframe centred at portrait ratio */
+  /* hero right: exact portrait container, iframe fills + clips TikTok chrome */
   .hero-right {
     position: relative;
     background: var(--ink);
-    display: flex;
-    align-items: center;
-    justify-content: center;
     overflow: hidden;
-    min-height: calc(100vh - 5rem);
   }
 
   .hero-right iframe {
-    /* fill the panel height, let width follow 9:16 */
-    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
     width: 100%;
-    aspect-ratio: 9 / 16;
-    max-height: calc(100vh - 5rem);
+    /* 140% height pushes TikTok’s bottom chrome (Watch Now bar, caption)
+       below the visible area, which is clipped by overflow:hidden */
+    height: 140%;
     border: none;
-    display: block;
-    flex-shrink: 0;
   }
 
   .hero-reel-fallback {
@@ -239,6 +239,7 @@
     padding: 2rem;
     text-align: center;
     background: linear-gradient(145deg, #1a1209, #2d1f0e);
+    z-index: 2;
   }
   .hero-reel-fallback p {
     font-family: 'Playfair Display', serif;
@@ -307,25 +308,23 @@
     position: relative;
     aspect-ratio: 9 / 16;
     overflow: hidden;
-    background: #000;
+    background: var(--ink);
   }
 
   .video-card iframe {
-    /* TikTok embed has chrome at top/bottom — push it up slightly to
-       hide the bottom bar and let the video fill the card */
     position: absolute;
-    top: -8%;
+    top: 0;
     left: 0;
     width: 100%;
-    height: 116%;
+    /* same technique as hero: push chrome below the card boundary */
+    height: 140%;
     border: none;
-    display: block;
   }
 
   .video-card-overlay {
     position: absolute;
     inset: 0;
-    background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, transparent 45%);
+    background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, transparent 40%);
     display: flex;
     flex-direction: column;
     justify-content: flex-end;
@@ -345,8 +344,9 @@
 
   .video-title {
     font-family: 'Playfair Display', serif;
-    font-size: 1.05rem;
+    font-size: 1rem;
     color: var(--cream);
+    line-height: 1.3;
   }
 
   /* ── ABOUT ── */
@@ -416,32 +416,33 @@
     font-size: 0.95rem;
   }
 
-  /* ── COLLAB ── */
-  #collab { background: var(--warm); }
+  /* ── CONTACT ── */
+  #contact { background: var(--warm); }
 
-  .collab-intro {
-    max-width: 640px;
-    margin-bottom: 3rem;
+  .contact-layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6rem;
+    align-items: start;
   }
 
-  .collab-intro p {
+  .contact-intro p {
     color: var(--muted);
     line-height: 1.85;
     font-size: 1rem;
     margin-bottom: 1.25rem;
   }
 
-  .collab-intro a {
+  .contact-intro a {
     color: var(--accent);
     text-decoration: underline;
     text-decoration-color: rgba(200,80,42,0.35);
     text-decoration-thickness: 1px;
     transition: text-decoration-color 0.2s;
   }
-  .collab-intro a:hover { text-decoration-color: var(--accent); }
+  .contact-intro a:hover { text-decoration-color: var(--accent); }
 
-  .collab-form {
-    max-width: 560px;
+  .contact-form {
     display: flex;
     flex-direction: column;
     gap: 1.25rem;
@@ -546,8 +547,8 @@
     .nav-links { gap: 1.5rem; }
 
     #home { grid-template-columns: 1fr; }
-    .hero-left { padding: 5rem 1.5rem 4rem; }
-    .hero-right { min-height: 70vh; }
+    .hero-left { padding: 7rem 1.5rem 4rem; }
+    .hero-right { min-height: 80vh; }
 
     section { padding: 4rem 1.5rem; }
 
@@ -559,10 +560,9 @@
 
     .video-grid { grid-template-columns: repeat(2, 1fr); }
 
-    #about {
-      grid-template-columns: 1fr;
-      gap: 3rem;
-    }
+    #about { grid-template-columns: 1fr; gap: 3rem; }
+
+    .contact-layout { grid-template-columns: 1fr; gap: 3rem; }
   }
 
   @media (max-width: 600px) {
@@ -571,10 +571,7 @@
 
     .hero-title { font-size: clamp(2.7rem, 14vw, 4rem); }
 
-    .hero-stats {
-      gap: 1.25rem;
-      flex-wrap: wrap;
-    }
+    .hero-stats { gap: 1.25rem; flex-wrap: wrap; }
 
     .video-grid { grid-template-columns: repeat(2, 1fr); }
     .video-card { aspect-ratio: 9 / 14; }
@@ -593,7 +590,7 @@
   <ul class="nav-links">
     <li><a href="#stories">Stories</a></li>
     <li><a href="#about">About</a></li>
-    <li><a href="#collab">Collab</a></li>
+    <li><a href="#contact">Contact</a></li>
   </ul>
   <button class="nav-toggle" aria-label="Menu" aria-expanded="false">
     <span></span><span></span><span></span>
@@ -603,7 +600,7 @@
 <ul class="nav-drawer" aria-hidden="true">
   <li><a href="#stories">Stories</a></li>
   <li><a href="#about">About</a></li>
-  <li><a href="#collab">Collab</a></li>
+  <li><a href="#contact">Contact</a></li>
 </ul>
 
 <!-- HERO -->
@@ -623,7 +620,7 @@
 
     <div class="hero-cta">
       <a href="#stories" class="btn primary">Watch stories</a>
-      <a href="#collab" class="btn secondary">Get in touch</a>
+      <a href="#contact" class="btn secondary">Reach out</a>
     </div>
 
     <div class="hero-stats">
@@ -647,7 +644,7 @@
       id="heroIframe"
       src="https://www.tiktok.com/embed/v2/7571825080297098504"
       frameborder="0"
-      allow="autoplay; clipboard-write; encrypted-media; picture-in-picture"
+      allow="clipboard-write; encrypted-media; picture-in-picture"
       allowfullscreen
     ></iframe>
     <div class="hero-reel-fallback" id="heroFallback">
@@ -672,7 +669,7 @@
   <div class="video-grid">
 
     <div class="video-card">
-      <iframe src="https://www.tiktok.com/embed/v2/7509450755686845704" frameborder="0" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture" allowfullscreen></iframe>
+      <iframe src="https://www.tiktok.com/embed/v2/7509450755686845704" frameborder="0" allow="clipboard-write; encrypted-media; picture-in-picture" allowfullscreen></iframe>
       <div class="video-card-overlay">
         <p class="video-tag">Culture</p>
         <p class="video-title">Walking the largest mall in the world — Iran</p>
@@ -680,7 +677,7 @@
     </div>
 
     <div class="video-card">
-      <iframe src="https://www.tiktok.com/embed/v2/7605256125923036437" frameborder="0" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture" allowfullscreen></iframe>
+      <iframe src="https://www.tiktok.com/embed/v2/7605256125923036437" frameborder="0" allow="clipboard-write; encrypted-media; picture-in-picture" allowfullscreen></iframe>
       <div class="video-card-overlay">
         <p class="video-tag">Travel</p>
         <p class="video-title">Hotel room tour in Munnar</p>
@@ -688,7 +685,7 @@
     </div>
 
     <div class="video-card">
-      <iframe src="https://www.tiktok.com/embed/v2/7438803106135149831" frameborder="0" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture" allowfullscreen></iframe>
+      <iframe src="https://www.tiktok.com/embed/v2/7438803106135149831" frameborder="0" allow="clipboard-write; encrypted-media; picture-in-picture" allowfullscreen></iframe>
       <div class="video-card-overlay">
         <p class="video-tag">Overland</p>
         <p class="video-title">Singapore to Bangkok without flying</p>
@@ -696,7 +693,7 @@
     </div>
 
     <div class="video-card">
-      <iframe src="https://www.tiktok.com/embed/v2/7547363535349746952" frameborder="0" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture" allowfullscreen></iframe>
+      <iframe src="https://www.tiktok.com/embed/v2/7547363535349746952" frameborder="0" allow="clipboard-write; encrypted-media; picture-in-picture" allowfullscreen></iframe>
       <div class="video-card-overlay">
         <p class="video-tag">Tips</p>
         <p class="video-title">One day in Yangmingshan — easy itinerary</p>
@@ -734,41 +731,43 @@
   </div>
 </section>
 
-<!-- COLLAB -->
-<section id="collab">
-  <p class="section-label">Collab</p>
-  <h2 class="section-title">Open to collaborations.</h2>
+<!-- CONTACT -->
+<section id="contact">
+  <p class="section-label">Contact</p>
+  <h2 class="section-title">Say hello.</h2>
 
-  <div class="collab-intro">
-    <p>
-      I'm always curious about projects that involve travel, culture, language, or everyday products — as a creator, a voice, or just someone on camera. If something feels like a fit, I'd love to hear about it.
-    </p>
-    <p>
-      For a fuller look at past work and case studies, <a href="CANVA_LINK_HERE" target="_blank" rel="noopener">here's my portfolio</a>.
-    </p>
-    <p>
-      Drop me a note below — even a rough idea is fine.
-    </p>
+  <div class="contact-layout">
+    <div class="contact-intro">
+      <p>
+        I love hearing from people — about a destination, a story that resonated, or just to say hi. No agenda needed.
+      </p>
+      <p>
+        If you're here with something more in mind — a project around travel, culture, language, or an everyday product — even better. Tell me what you're thinking, and we can figure out if it's a fit.
+      </p>
+      <p>
+        For a fuller look at past work and case studies, <a href="CANVA_LINK_HERE" target="_blank" rel="noopener">here's my portfolio</a>.
+      </p>
+    </div>
+
+    <form class="contact-form" id="contactForm">
+      <div class="form-group">
+        <label for="name">Name</label>
+        <input type="text" id="name" name="name" placeholder="Your name" required>
+      </div>
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input type="email" id="email" name="email" placeholder="you@example.com" required>
+      </div>
+      <div class="form-group">
+        <label for="message">Message</label>
+        <textarea id="message" name="message" placeholder="What's on your mind?" required></textarea>
+      </div>
+      <div>
+        <button type="submit" class="btn primary">Send message</button>
+        <p class="form-note">Opens your email app with the message pre-filled.</p>
+      </div>
+    </form>
   </div>
-
-  <form class="collab-form" id="collabForm">
-    <div class="form-group">
-      <label for="name">Name</label>
-      <input type="text" id="name" name="name" placeholder="Your name" required>
-    </div>
-    <div class="form-group">
-      <label for="email">Email</label>
-      <input type="email" id="email" name="email" placeholder="you@example.com" required>
-    </div>
-    <div class="form-group">
-      <label for="message">Message</label>
-      <textarea id="message" name="message" placeholder="What did you have in mind?" required></textarea>
-    </div>
-    <div>
-      <button type="submit" class="btn primary">Send message</button>
-      <p class="form-note">This opens your email app with the message pre-filled.</p>
-    </div>
-  </form>
 </section>
 
 <!-- FOOTER -->
@@ -784,12 +783,12 @@
 </footer>
 
 <script>
-  document.getElementById('collabForm').addEventListener('submit', function(e) {
+  document.getElementById('contactForm').addEventListener('submit', function(e) {
     e.preventDefault();
     const name = document.getElementById('name').value;
     const email = document.getElementById('email').value;
     const message = document.getElementById('message').value;
-    const subject = encodeURIComponent('Collab enquiry from ' + name);
+    const subject = encodeURIComponent('Message from ' + name);
     const body = encodeURIComponent(message + '\n\n— ' + name + ' (' + email + ')');
     window.location.href = 'mailto:fgtandadjaja@gmail.com?subject=' + subject + '&body=' + body;
   });
