@@ -116,7 +116,6 @@
     display: grid;
     grid-template-columns: 1fr min(46vw, calc(100vh * 9 / 16));
     overflow: hidden;
-    /* no padding here — padding lives inside hero-left only */
   }
 
   .hero-left {
@@ -285,28 +284,23 @@
 
   .video-card {
     position: relative;
-    /* 9/14 is less extreme than 9/16 — keeps the section from being too tall */
     aspect-ratio: 9 / 14;
     overflow: hidden;
     background: var(--ink);
-    /* isolation ensures the mask div stacks correctly above the iframe */
     isolation: isolate;
   }
 
   .video-card iframe {
     position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
+    /* scale up to clip TikTok's internal white padding */
+    top: -5%;
+    left: -5%;
+    width: 110%;
+    height: 110%;
     border: none;
     z-index: 0;
   }
 
-  /*
-    Real div (not ::after) used here because pseudo-elements don’t reliably
-    stack above iframes in all browsers. This div covers TikTok’s bottom
-    chrome (Watch Now bar + caption — roughly 160px at typical card sizes).
-  */
   .video-chrome-mask {
     position: absolute;
     bottom: 0;
