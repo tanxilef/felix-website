@@ -67,7 +67,6 @@
   }
   .nav-links a:hover { color: var(--ink); }
 
-  /* hamburger */
   .nav-toggle {
     display: none;
     flex-direction: column;
@@ -89,7 +88,6 @@
   .nav-toggle.open span:nth-child(2) { opacity: 0; }
   .nav-toggle.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
 
-  /* mobile drawer */
   .nav-drawer {
     display: none;
     position: fixed;
@@ -182,16 +180,9 @@
     font-family: inherit;
   }
 
-  .btn.primary {
-    background: var(--ink);
-    color: var(--cream);
-  }
+  .btn.primary { background: var(--ink); color: var(--cream); }
   .btn.primary:hover { background: var(--accent); border-color: var(--accent); }
-
-  .btn.secondary {
-    color: var(--ink);
-    background: transparent;
-  }
+  .btn.secondary { color: var(--ink); background: transparent; }
   .btn.secondary:hover { background: var(--warm); }
 
   .hero-stats {
@@ -229,7 +220,6 @@
     display: block;
   }
 
-  /* fallback shown when iframe fails / blocked */
   .hero-reel-fallback {
     display: none;
     position: absolute;
@@ -279,7 +269,7 @@
     margin-bottom: 2rem;
   }
 
-  /* ── VIDEOS / STORIES FROM THE ROAD ── */
+  /* ── STORIES ── */
   #stories {
     background: var(--ink);
     color: var(--cream);
@@ -316,11 +306,9 @@
     background: #1a1209;
   }
 
-  .video-card video,
   .video-card iframe {
     width: 100%;
     height: 100%;
-    object-fit: cover;
     border: none;
     display: block;
   }
@@ -351,7 +339,6 @@
     color: var(--cream);
   }
 
-
   /* ── ABOUT ── */
   #about {
     display: grid;
@@ -366,17 +353,14 @@
   .about-img-block {
     width: 100%;
     aspect-ratio: 3 / 4;
-    background:
-      radial-gradient(ellipse at 35% 35%, rgba(200,80,42,0.28), transparent 55%),
-      linear-gradient(145deg, #1a1209, #2d1f0e);
     position: relative;
     overflow: hidden;
     display: flex;
     align-items: flex-end;
     padding: 2rem;
+    background: linear-gradient(145deg, #1a1209, #2d1f0e);
   }
 
-  /* when a real photo is added */
   .about-img-block img {
     position: absolute;
     inset: 0;
@@ -387,12 +371,21 @@
     display: block;
   }
 
+  /* dark gradient so text stays readable over the photo */
+  .about-img-block::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(0,0,0,0.65) 0%, transparent 55%);
+    pointer-events: none;
+  }
+
   .about-img-block p {
-    color: rgba(245,240,232,0.78);
+    color: rgba(245,240,232,0.88);
     font-family: 'Playfair Display', serif;
-    font-size: 2rem;
-    line-height: 1.2;
-    max-width: 360px;
+    font-size: 1.6rem;
+    line-height: 1.25;
+    max-width: 320px;
     position: relative;
     z-index: 1;
   }
@@ -415,9 +408,7 @@
   }
 
   /* ── COLLAB ── */
-  #collab {
-    background: var(--warm);
-  }
+  #collab { background: var(--warm); }
 
   .collab-intro {
     max-width: 640px;
@@ -438,10 +429,7 @@
     text-decoration-thickness: 1px;
     transition: text-decoration-color 0.2s;
   }
-
-  .collab-intro a:hover {
-    text-decoration-color: var(--accent);
-  }
+  .collab-intro a:hover { text-decoration-color: var(--accent); }
 
   .collab-form {
     max-width: 560px;
@@ -474,11 +462,8 @@
     outline: none;
     transition: border-color 0.2s;
   }
-
   .form-group input:focus,
-  .form-group textarea:focus {
-    border-color: var(--accent);
-  }
+  .form-group textarea:focus { border-color: var(--accent); }
 
   .form-group textarea {
     resize: vertical;
@@ -526,7 +511,6 @@
     text-decoration: none;
     transition: color 0.2s;
   }
-
   .footer-socials a:hover { color: var(--accent); }
 
   .footer-bottom {
@@ -542,16 +526,12 @@
   }
 
   .hero-eyebrow { animation: fadeUp 0.6s ease 0.1s both; }
-  .hero-title { animation: fadeUp 0.6s ease 0.25s both; }
-  .hero-sub { animation: fadeUp 0.6s ease 0.4s both; }
-  .hero-cta { animation: fadeUp 0.6s ease 0.5s both; }
-  .hero-stats { animation: fadeUp 0.6s ease 0.6s both; }
+  .hero-title   { animation: fadeUp 0.6s ease 0.25s both; }
+  .hero-sub     { animation: fadeUp 0.6s ease 0.4s both; }
+  .hero-cta     { animation: fadeUp 0.6s ease 0.5s both; }
+  .hero-stats   { animation: fadeUp 0.6s ease 0.6s both; }
 
   /* ── RESPONSIVE ── */
-  @media (max-width: 1000px) {
-    .video-grid { grid-template-columns: repeat(2, 1fr); }
-  }
-
   @media (max-width: 900px) {
     nav { padding: 1rem 1.5rem; }
     .nav-links { gap: 1.5rem; }
@@ -609,7 +589,6 @@
   </button>
 </nav>
 
-<!-- mobile full-screen drawer -->
 <ul class="nav-drawer" aria-hidden="true">
   <li><a href="#stories">Stories</a></li>
   <li><a href="#about">About</a></li>
@@ -662,17 +641,14 @@
       allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"
       allowfullscreen
     ></iframe>
-    <!-- shown if iframe is blocked / fails to load -->
     <div class="hero-reel-fallback" id="heroFallback">
       <p>A researcher with a travel journalist itch.</p>
-      <a href="https://www.instagram.com/reel/DT-gjqFD92V/" target="_blank" rel="noopener">
-        Watch on Instagram
-      </a>
+      <a href="https://www.instagram.com/reel/DT-gjqFD92V/" target="_blank" rel="noopener">Watch on Instagram</a>
     </div>
   </div>
 </section>
 
-<!-- STORIES / VIDEOS -->
+<!-- STORIES -->
 <section id="stories">
   <div class="stories-header">
     <div>
@@ -710,30 +686,6 @@
       </div>
     </div>
 
-    <div class="video-card">
-      <iframe src="https://www.instagram.com/reel/DT-gjqFD92V/embed/" frameborder="0" scrolling="no" allowtransparency="true" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share" allowfullscreen></iframe>
-      <div class="video-card-overlay">
-        <p class="video-tag">Travel</p>
-        <p class="video-title">What's a typical Kerala itinerary?</p>
-      </div>
-    </div>
-
-    <div class="video-card">
-      <iframe src="https://www.instagram.com/reel/DZfUhx9I9bf/embed/" frameborder="0" scrolling="no" allowtransparency="true" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share" allowfullscreen></iframe>
-      <div class="video-card-overlay">
-        <p class="video-tag">Tips</p>
-        <p class="video-title">How to visit Kamakura easily</p>
-      </div>
-    </div>
-
-    <div class="video-card">
-      <iframe src="https://www.instagram.com/reel/DZmvjZ4iH-v/embed/" frameborder="0" scrolling="no" allowtransparency="true" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share" allowfullscreen></iframe>
-      <div class="video-card-overlay">
-        <p class="video-tag">Food</p>
-        <p class="video-title">At a bakery in Albania</p>
-      </div>
-    </div>
-
   </div>
 </section>
 
@@ -741,7 +693,7 @@
 <section id="about">
   <div class="about-img-wrap">
     <div class="about-img-block">
-      <!-- To add a real photo: <img src="photo.jpg" alt="Felix Tandadjaja"> -->
+      <img src="Felix%20Tandadjaja.jpg" alt="Felix Tandadjaja">
       <p>A researcher with a travel journalist itch.</p>
     </div>
     <div class="about-img-accent"></div>
@@ -815,7 +767,6 @@
 </footer>
 
 <script>
-  // contact form → mailto
   document.getElementById('collabForm').addEventListener('submit', function(e) {
     e.preventDefault();
     const name = document.getElementById('name').value;
@@ -826,7 +777,6 @@
     window.location.href = 'mailto:fgtandadjaja@gmail.com?subject=' + subject + '&body=' + body;
   });
 
-  // hamburger menu
   const toggle = document.querySelector('.nav-toggle');
   const drawer = document.querySelector('.nav-drawer');
   toggle.addEventListener('click', () => {
@@ -846,15 +796,9 @@
     });
   });
 
-  // hero iframe fallback
-  // Instagram embeds don't fire onerror, so we check after a timeout
-  // whether the iframe has loaded any content (cross-origin will be empty doc)
   const heroIframe = document.getElementById('heroIframe');
   const heroFallback = document.getElementById('heroFallback');
   let fallbackTimer = setTimeout(() => {
-    // If we can detect the iframe is blank (e.g. blocked by browser policy)
-    // show the fallback. In most modern browsers the iframe loads fine;
-    // this fires only if still no load event after 8s.
     heroFallback.style.display = 'flex';
     heroIframe.style.display = 'none';
   }, 8000);
