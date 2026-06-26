@@ -1,0 +1,865 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Felix Tandadjaja | Travel Creator</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500;700&family=DM+Mono:wght@400&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --ink: #0e0e0e;
+    --cream: #f5f0e8;
+    --warm: #e8dfd0;
+    --accent: #c8502a;
+    --muted: #7a7060;
+    --border: rgba(14,14,14,0.12);
+  }
+
+  *, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--cream);
+    color: var(--ink);
+    overflow-x: hidden;
+  }
+
+  a { color: inherit; }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.25rem 3rem;
+    background: rgba(245,240,232,0.88);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .nav-logo {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.1rem;
+    letter-spacing: 0.04em;
+    text-decoration: none;
+    color: var(--ink);
+  }
+
+  .nav-links { display: flex; gap: 2.5rem; list-style: none; }
+  .nav-links a {
+    font-size: 0.8rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--ink); }
+
+  /* hamburger */
+  .nav-toggle {
+    display: none;
+    flex-direction: column;
+    gap: 5px;
+    cursor: pointer;
+    background: none;
+    border: none;
+    padding: 4px;
+  }
+  .nav-toggle span {
+    display: block;
+    width: 22px;
+    height: 2px;
+    background: var(--ink);
+    transition: 0.25s;
+    transform-origin: center;
+  }
+  .nav-toggle.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+  .nav-toggle.open span:nth-child(2) { opacity: 0; }
+  .nav-toggle.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+  /* mobile drawer */
+  .nav-drawer {
+    display: none;
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    z-index: 99;
+    background: var(--cream);
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2.5rem;
+    list-style: none;
+  }
+  .nav-drawer.open { display: flex; }
+  .nav-drawer a {
+    font-size: 1.5rem;
+    font-family: 'Playfair Display', serif;
+    color: var(--ink);
+    text-decoration: none;
+    letter-spacing: 0.06em;
+  }
+  .nav-drawer a:hover { color: var(--accent); }
+
+  /* ── HERO ── */
+  #home {
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    padding-top: 5rem;
+    overflow: hidden;
+  }
+
+  .hero-left {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 5rem 3rem;
+  }
+
+  .hero-eyebrow,
+  .section-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+
+  .hero-eyebrow { margin-bottom: 1.5rem; }
+
+  .hero-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(3rem, 5vw, 4.8rem);
+    line-height: 1.08;
+    margin-bottom: 1.5rem;
+  }
+
+  .hero-title em {
+    font-style: italic;
+    color: var(--accent);
+  }
+
+  .hero-sub {
+    font-size: 1rem;
+    color: var(--muted);
+    line-height: 1.75;
+    max-width: 470px;
+    margin-bottom: 2.5rem;
+  }
+
+  .hero-cta {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    margin-bottom: 2.5rem;
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.95rem 1.35rem;
+    text-decoration: none;
+    font-size: 0.78rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    border: 1px solid var(--ink);
+    transition: 0.2s;
+    cursor: pointer;
+    background: none;
+    font-family: inherit;
+  }
+
+  .btn.primary {
+    background: var(--ink);
+    color: var(--cream);
+  }
+  .btn.primary:hover { background: var(--accent); border-color: var(--accent); }
+
+  .btn.secondary {
+    color: var(--ink);
+    background: transparent;
+  }
+  .btn.secondary:hover { background: var(--warm); }
+
+  .hero-stats {
+    display: flex;
+    gap: 2.5rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--border);
+  }
+
+  .stat-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.8rem;
+    font-weight: 700;
+  }
+
+  .stat-label {
+    font-size: 0.72rem;
+    color: var(--muted);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-top: 0.2rem;
+  }
+
+  .hero-right {
+    position: relative;
+    overflow: hidden;
+    background: var(--ink);
+  }
+
+  .hero-right iframe {
+    width: 100%;
+    height: 100%;
+    min-height: 100vh;
+    border: none;
+    display: block;
+  }
+
+  /* fallback shown when iframe fails / blocked */
+  .hero-reel-fallback {
+    display: none;
+    position: absolute;
+    inset: 0;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1.25rem;
+    padding: 2rem;
+    text-align: center;
+    background: linear-gradient(145deg, #1a1209, #2d1f0e);
+  }
+  .hero-reel-fallback p {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.2rem;
+    color: rgba(245,240,232,0.75);
+    line-height: 1.5;
+    max-width: 280px;
+  }
+  .hero-reel-fallback a {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.25rem;
+    border: 1px solid rgba(245,240,232,0.35);
+    color: var(--cream);
+    text-decoration: none;
+    font-size: 0.78rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    transition: border-color 0.2s;
+  }
+  .hero-reel-fallback a:hover { border-color: var(--accent); color: var(--accent); }
+
+  @media (max-width: 900px) {
+    .hero-right iframe { min-height: 70vh; }
+  }
+
+  /* ── SECTION BASE ── */
+  section { padding: 6rem 3rem; }
+  .section-label { margin-bottom: 1rem; }
+
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2rem, 3.5vw, 3rem);
+    line-height: 1.15;
+    margin-bottom: 2rem;
+  }
+
+  /* ── VIDEOS / STORIES FROM THE ROAD ── */
+  #stories {
+    background: var(--ink);
+    color: var(--cream);
+  }
+
+  #stories .section-title { color: var(--cream); }
+
+  .stories-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 3rem;
+    margin-bottom: 3rem;
+  }
+
+  .stories-desc {
+    max-width: 430px;
+    color: rgba(245,240,232,0.62);
+    font-size: 0.95rem;
+    line-height: 1.7;
+  }
+
+  .video-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: rgba(245,240,232,0.08);
+  }
+
+  .video-card {
+    position: relative;
+    aspect-ratio: 9 / 16;
+    overflow: hidden;
+    background: #1a1209;
+  }
+
+  .video-card video,
+  .video-card iframe {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border: none;
+    display: block;
+  }
+
+  .video-card-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(0,0,0,0.75) 0%, transparent 45%);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 1.25rem;
+    pointer-events: none;
+  }
+
+  .video-tag {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.62rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 0.4rem;
+  }
+
+  .video-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.05rem;
+    color: var(--cream);
+  }
+
+
+  /* ── ABOUT ── */
+  #about {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6rem;
+    align-items: center;
+    background: var(--cream);
+  }
+
+  .about-img-wrap { position: relative; }
+
+  .about-img-block {
+    width: 100%;
+    aspect-ratio: 3 / 4;
+    background:
+      radial-gradient(ellipse at 35% 35%, rgba(200,80,42,0.28), transparent 55%),
+      linear-gradient(145deg, #1a1209, #2d1f0e);
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: flex-end;
+    padding: 2rem;
+  }
+
+  /* when a real photo is added */
+  .about-img-block img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: top center;
+    display: block;
+  }
+
+  .about-img-block p {
+    color: rgba(245,240,232,0.78);
+    font-family: 'Playfair Display', serif;
+    font-size: 2rem;
+    line-height: 1.2;
+    max-width: 360px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .about-img-accent {
+    position: absolute;
+    bottom: -1.5rem; right: -1.5rem;
+    width: 60%;
+    aspect-ratio: 1;
+    background: var(--accent);
+    opacity: 0.15;
+    z-index: -1;
+  }
+
+  .about-body p {
+    color: var(--muted);
+    line-height: 1.8;
+    margin-bottom: 1rem;
+    font-size: 0.95rem;
+  }
+
+  /* ── COLLAB ── */
+  #collab {
+    background: var(--warm);
+  }
+
+  .collab-intro {
+    max-width: 640px;
+    margin-bottom: 3rem;
+  }
+
+  .collab-intro p {
+    color: var(--muted);
+    line-height: 1.85;
+    font-size: 1rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .collab-intro a {
+    color: var(--accent);
+    text-decoration: underline;
+    text-decoration-color: rgba(200,80,42,0.35);
+    text-decoration-thickness: 1px;
+    transition: text-decoration-color 0.2s;
+  }
+
+  .collab-intro a:hover {
+    text-decoration-color: var(--accent);
+  }
+
+  .collab-form {
+    max-width: 560px;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .form-group label {
+    font-size: 0.72rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .form-group input,
+  .form-group textarea {
+    background: var(--cream);
+    border: 1px solid var(--border);
+    padding: 0.85rem 1rem;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.9rem;
+    color: var(--ink);
+    outline: none;
+    transition: border-color 0.2s;
+  }
+
+  .form-group input:focus,
+  .form-group textarea:focus {
+    border-color: var(--accent);
+  }
+
+  .form-group textarea {
+    resize: vertical;
+    min-height: 130px;
+  }
+
+  .form-note {
+    font-size: 0.78rem;
+    color: var(--muted);
+    margin-top: 0.25rem;
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    background: var(--ink);
+    color: rgba(245,240,232,0.4);
+    padding: 3rem 3rem 2.5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+    text-align: center;
+    border-top: 1px solid rgba(245,240,232,0.1);
+  }
+
+  .footer-logo {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.1rem;
+    color: var(--cream);
+    text-decoration: none;
+  }
+
+  .footer-socials {
+    display: flex;
+    gap: 2rem;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .footer-socials a {
+    font-size: 0.78rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(245,240,232,0.55);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+
+  .footer-socials a:hover { color: var(--accent); }
+
+  .footer-bottom {
+    font-size: 0.7rem;
+    letter-spacing: 0.08em;
+    color: rgba(245,240,232,0.3);
+  }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .hero-eyebrow { animation: fadeUp 0.6s ease 0.1s both; }
+  .hero-title { animation: fadeUp 0.6s ease 0.25s both; }
+  .hero-sub { animation: fadeUp 0.6s ease 0.4s both; }
+  .hero-cta { animation: fadeUp 0.6s ease 0.5s both; }
+  .hero-stats { animation: fadeUp 0.6s ease 0.6s both; }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 1000px) {
+    .video-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+
+  @media (max-width: 900px) {
+    nav { padding: 1rem 1.5rem; }
+    .nav-links { gap: 1.5rem; }
+
+    #home { grid-template-columns: 1fr; }
+    .hero-left { padding: 5rem 1.5rem 4rem; }
+    .hero-right { min-height: 70vh; }
+
+    section { padding: 4rem 1.5rem; }
+
+    .stories-header {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 1rem;
+    }
+
+    #about {
+      grid-template-columns: 1fr;
+      gap: 3rem;
+    }
+  }
+
+  @media (max-width: 600px) {
+    .nav-links { display: none; }
+    .nav-toggle { display: flex; }
+
+    .hero-title { font-size: clamp(2.7rem, 14vw, 4rem); }
+
+    .hero-stats {
+      gap: 1.25rem;
+      flex-wrap: wrap;
+    }
+
+    .video-grid { grid-template-columns: 1fr; }
+    .video-card { aspect-ratio: 9 / 14; }
+
+    .section-title { margin-bottom: 1.5rem; }
+
+    .footer-socials { gap: 1.25rem 1.5rem; }
+  }
+</style>
+</head>
+
+<body>
+
+<nav>
+  <a href="#home" class="nav-logo">Felix Tandadjaja</a>
+  <ul class="nav-links">
+    <li><a href="#stories">Stories</a></li>
+    <li><a href="#about">About</a></li>
+    <li><a href="#collab">Collab</a></li>
+  </ul>
+  <button class="nav-toggle" aria-label="Menu" aria-expanded="false">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- mobile full-screen drawer -->
+<ul class="nav-drawer" aria-hidden="true">
+  <li><a href="#stories">Stories</a></li>
+  <li><a href="#about">About</a></li>
+  <li><a href="#collab">Collab</a></li>
+</ul>
+
+<!-- HERO -->
+<section id="home">
+  <div class="hero-left">
+    <p class="hero-eyebrow">Travel Creator · Singapore-based</p>
+
+    <h1 class="hero-title">
+      Making the world feel<br>
+      less far, less scary,<br>
+      and more <em>human.</em>
+    </h1>
+
+    <p class="hero-sub">
+      I'm Felix — an Indonesian-born, Singapore-based creator making short-form stories around travel, culture, identity, and everyday moments along the way.
+    </p>
+
+    <div class="hero-cta">
+      <a href="#stories" class="btn primary">Watch stories</a>
+      <a href="#collab" class="btn secondary">Get in touch</a>
+    </div>
+
+    <div class="hero-stats">
+      <div>
+        <div class="stat-num">1M+</div>
+        <div class="stat-label">Collective views</div>
+      </div>
+      <div>
+        <div class="stat-num">2+</div>
+        <div class="stat-label">Years creating</div>
+      </div>
+      <div>
+        <div class="stat-num">IG · TT</div>
+        <div class="stat-label">Short-form first</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="hero-right" id="heroRight">
+    <iframe
+      id="heroIframe"
+      src="https://www.instagram.com/reel/DT-gjqFD92V/embed/"
+      frameborder="0"
+      scrolling="no"
+      allowtransparency="true"
+      allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"
+      allowfullscreen
+    ></iframe>
+    <!-- shown if iframe is blocked / fails to load -->
+    <div class="hero-reel-fallback" id="heroFallback">
+      <p>A researcher with a travel journalist itch.</p>
+      <a href="https://www.instagram.com/reel/DT-gjqFD92V/" target="_blank" rel="noopener">
+        Watch on Instagram
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- STORIES / VIDEOS -->
+<section id="stories">
+  <div class="stories-header">
+    <div>
+      <p class="section-label">Stories</p>
+      <h2 class="section-title">A few stories from the road.</h2>
+    </div>
+    <p class="stories-desc">
+      Short clips from recent trips — overland routes, language attempts, and places that don't always make it into the headlines.
+    </p>
+  </div>
+
+  <div class="video-grid">
+
+    <div class="video-card">
+      <iframe src="https://www.instagram.com/reel/DTBwnNQk7U1/embed/" frameborder="0" scrolling="no" allowtransparency="true" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share" allowfullscreen></iframe>
+      <div class="video-card-overlay">
+        <p class="video-tag">Food</p>
+        <p class="video-title">Eating pisang goreng in Kerala</p>
+      </div>
+    </div>
+
+    <div class="video-card">
+      <iframe src="https://www.instagram.com/reel/DQ9SOsujy_W/embed/" frameborder="0" scrolling="no" allowtransparency="true" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share" allowfullscreen></iframe>
+      <div class="video-card-overlay">
+        <p class="video-tag">Language</p>
+        <p class="video-title">Speaking broken Farsi to explain my heritage</p>
+      </div>
+    </div>
+
+    <div class="video-card">
+      <iframe src="https://www.instagram.com/reel/DTcRdL7jz_6/embed/" frameborder="0" scrolling="no" allowtransparency="true" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share" allowfullscreen></iframe>
+      <div class="video-card-overlay">
+        <p class="video-tag">Language</p>
+        <p class="video-title">Me speaking broken Spanish</p>
+      </div>
+    </div>
+
+    <div class="video-card">
+      <iframe src="https://www.instagram.com/reel/DT-gjqFD92V/embed/" frameborder="0" scrolling="no" allowtransparency="true" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share" allowfullscreen></iframe>
+      <div class="video-card-overlay">
+        <p class="video-tag">Travel</p>
+        <p class="video-title">What's a typical Kerala itinerary?</p>
+      </div>
+    </div>
+
+    <div class="video-card">
+      <iframe src="https://www.instagram.com/reel/DZfUhx9I9bf/embed/" frameborder="0" scrolling="no" allowtransparency="true" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share" allowfullscreen></iframe>
+      <div class="video-card-overlay">
+        <p class="video-tag">Tips</p>
+        <p class="video-title">How to visit Kamakura easily</p>
+      </div>
+    </div>
+
+    <div class="video-card">
+      <iframe src="https://www.instagram.com/reel/DZmvjZ4iH-v/embed/" frameborder="0" scrolling="no" allowtransparency="true" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share" allowfullscreen></iframe>
+      <div class="video-card-overlay">
+        <p class="video-tag">Food</p>
+        <p class="video-title">At a bakery in Albania</p>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="about-img-wrap">
+    <div class="about-img-block">
+      <!-- To add a real photo: <img src="photo.jpg" alt="Felix Tandadjaja"> -->
+      <p>A researcher with a travel journalist itch.</p>
+    </div>
+    <div class="about-img-accent"></div>
+  </div>
+
+  <div>
+    <p class="section-label">About</p>
+    <h2 class="section-title">Curious first, polished second.</h2>
+
+    <div class="about-body">
+      <p>
+        I grew up wanting to be a travel journalist, inspired by stories that made faraway places feel alive. I eventually took the science and engineering route, but the storytelling itch never really left.
+      </p>
+      <p>
+        These days I split my time between research and creating — documenting unconventional destinations, overland routes, language attempts, awkward moments, kind strangers, and practical lessons from the road.
+      </p>
+      <p>
+        I'm Indonesian-born, Singapore-based, and especially drawn to places people misunderstand or overlook. My content is for people who want to travel beyond the obvious, without pretending money, time, or confidence are unlimited.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- COLLAB -->
+<section id="collab">
+  <p class="section-label">Collab</p>
+  <h2 class="section-title">Open to collaborations.</h2>
+
+  <div class="collab-intro">
+    <p>
+      I'm always curious about projects that involve travel, culture, language, or everyday products — as a creator, a voice, or just someone on camera. If something feels like a fit, I'd love to hear about it.
+    </p>
+    <p>
+      For a fuller look at past work and case studies, <a href="CANVA_LINK_HERE" target="_blank" rel="noopener">here's my portfolio</a>.
+    </p>
+    <p>
+      Drop me a note below — even a rough idea is fine.
+    </p>
+  </div>
+
+  <form class="collab-form" id="collabForm">
+    <div class="form-group">
+      <label for="name">Name</label>
+      <input type="text" id="name" name="name" placeholder="Your name" required>
+    </div>
+    <div class="form-group">
+      <label for="email">Email</label>
+      <input type="email" id="email" name="email" placeholder="you@example.com" required>
+    </div>
+    <div class="form-group">
+      <label for="message">Message</label>
+      <textarea id="message" name="message" placeholder="What did you have in mind?" required></textarea>
+    </div>
+    <div>
+      <button type="submit" class="btn primary">Send message</button>
+      <p class="form-note">This opens your email app with the message pre-filled.</p>
+    </div>
+  </form>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <a href="#home" class="footer-logo">Felix Tandadjaja</a>
+  <div class="footer-socials">
+    <a href="https://www.tiktok.com/@flexi.travels" target="_blank" rel="noopener">TikTok</a>
+    <a href="https://www.instagram.com/flexi.travels" target="_blank" rel="noopener">Instagram</a>
+    <a href="https://www.linkedin.com/in/felixgt/" target="_blank" rel="noopener">LinkedIn</a>
+    <a href="https://github.com/tanxilef" target="_blank" rel="noopener">GitHub</a>
+  </div>
+  <p class="footer-bottom">&copy; 2026 Felix Tandadjaja</p>
+</footer>
+
+<script>
+  // contact form → mailto
+  document.getElementById('collabForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const name = document.getElementById('name').value;
+    const email = document.getElementById('email').value;
+    const message = document.getElementById('message').value;
+    const subject = encodeURIComponent('Collab enquiry from ' + name);
+    const body = encodeURIComponent(message + '\n\n— ' + name + ' (' + email + ')');
+    window.location.href = 'mailto:fgtandadjaja@gmail.com?subject=' + subject + '&body=' + body;
+  });
+
+  // hamburger menu
+  const toggle = document.querySelector('.nav-toggle');
+  const drawer = document.querySelector('.nav-drawer');
+  toggle.addEventListener('click', () => {
+    const open = drawer.classList.toggle('open');
+    toggle.classList.toggle('open', open);
+    toggle.setAttribute('aria-expanded', open);
+    drawer.setAttribute('aria-hidden', !open);
+    document.body.style.overflow = open ? 'hidden' : '';
+  });
+  drawer.querySelectorAll('a').forEach(a => {
+    a.addEventListener('click', () => {
+      drawer.classList.remove('open');
+      toggle.classList.remove('open');
+      toggle.setAttribute('aria-expanded', 'false');
+      drawer.setAttribute('aria-hidden', 'true');
+      document.body.style.overflow = '';
+    });
+  });
+
+  // hero iframe fallback
+  // Instagram embeds don't fire onerror, so we check after a timeout
+  // whether the iframe has loaded any content (cross-origin will be empty doc)
+  const heroIframe = document.getElementById('heroIframe');
+  const heroFallback = document.getElementById('heroFallback');
+  let fallbackTimer = setTimeout(() => {
+    // If we can detect the iframe is blank (e.g. blocked by browser policy)
+    // show the fallback. In most modern browsers the iframe loads fine;
+    // this fires only if still no load event after 8s.
+    heroFallback.style.display = 'flex';
+    heroIframe.style.display = 'none';
+  }, 8000);
+  heroIframe.addEventListener('load', () => clearTimeout(fallbackTimer));
+</script>
+
+</body>
+</html>
